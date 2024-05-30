@@ -5,7 +5,7 @@ https://arxiv.org/abs/1811.00656
 """
 import tensorflow as tf
 import os
-import tensorflow.contrib.slim as slim
+import tf_slim as slim
 pwd = os.path.dirname(__file__)
 
 class Solver(object):
@@ -32,7 +32,7 @@ class Solver(object):
             os.makedirs(self.model_dir)
         self.model_path = os.path.join(self.model_dir, cfg.MODEL_NAME)
         self.global_step = tf.Variable(0, trainable=False, name='global_step')
-        self.saver = tf.train.Saver(max_to_keep=5, var_list=tf.global_variables())
+        self.saver =  tf.compat.v1.train.Saver(max_to_keep=5, var_list=tf.compat.v1.global_variables())
         # initialize the graph
         if self.net.is_train:
             self.num_epoch = cfg.TRAIN.NUM_EPOCH
@@ -46,7 +46,7 @@ class Solver(object):
             self.summary = tf.summary.merge([self.loss_summary, self.lr_summary])
             self.writer = tf.summary.FileWriter(self.summary_dir, self.sess.graph)
 
-        self.sess.run(tf.global_variables_initializer())
+        self.sess.run(tf.compat.v1.global_variables_initializer())
         if cfg.PRETRAINED_MODELS != '':
             self.load_ckpt(cfg.PRETRAINED_MODELS)
         else: # Load ckpt

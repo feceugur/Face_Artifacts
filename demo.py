@@ -22,7 +22,7 @@ print('***********')
 # Parse config
 cfg_file = 'cfgs/res50.yml'
 with open(cfg_file, 'r') as f:
-    cfg = edict(yaml.load(f))
+    cfg = edict(yaml.full_load(f))
 sample_num = 10
 
 # Employ dlib to extract face area and landmark points
@@ -30,10 +30,10 @@ pwd = os.path.dirname(__file__)
 front_face_detector = dlib.get_frontal_face_detector()
 lmark_predictor = dlib.shape_predictor(pwd + '/dlib_model/shape_predictor_68_face_landmarks.dat')
 
-tfconfig = tf.ConfigProto(allow_soft_placement=True)
+tfconfig = tf.compat.v1.ConfigProto(allow_soft_placement=True)
 tfconfig.gpu_options.allow_growth=True
 # init session
-sess = tf.Session(config=tfconfig)
+sess = tf.compat.v1.Session(config=tfconfig)
 # Build network
 reso_net = ResoNet(cfg=cfg, is_train=False)
 reso_net.build()

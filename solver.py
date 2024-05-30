@@ -90,8 +90,24 @@ class Solver(object):
         save_path = self.saver.save(self.sess, self.model_path, global_step=step)
         print('Model {} saved in file.'.format(save_path))
 
+    def print_checkpoint_variables(self, checkpoint_path):
+        reader = tf.compat.v1.train.NewCheckpointReader(checkpoint_path)
+        var_to_shape_map = reader.get_variable_to_shape_map()
+        for key in var_to_shape_map:
+            print("Tensor name: ", key)
+
+    def print_model_variables(self):
+        for var in tf.compat.v1.global_variables():
+            print("Model variable: ", var.name)
+
     def load(self):
         """Load weights from checkpoint"""
+        print("Variables in checkpoint:")
+        self.print_checkpoint_variables(self.model_path)
+
+        print("Variables in model:")
+        self.print_model_variables()
+
         checkpoint_path = self.model_path
         meta_file = checkpoint_path + '.meta'
         if os.path.isfile(meta_file):

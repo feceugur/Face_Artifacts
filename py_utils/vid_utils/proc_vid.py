@@ -29,7 +29,7 @@ def crop_video(pathIn, pathOut, pos, size):
         y2 = np.int32(pos[2])
         x2 = np.int32(pos[3])
         roi = image[y1:y2, x1:x2, :]
-        if size is not 'None':
+        if size != 'None':
             roi = cv2.resize(roi, (size[1], size[0]))
         imgs[i] = roi
 

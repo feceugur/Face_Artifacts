@@ -92,11 +92,16 @@ class Solver(object):
 
     def load(self):
         """Load weights from checkpoint"""
-        if os.path.isfile(self.model_path + '.meta'):
-            self.saver.restore(self.sess, self.model_path)
-            print('Loading checkpoint {}'.format(self.model_path))
+        checkpoint_path = self.model_path
+        meta_file = checkpoint_path + '.meta'
+        if os.path.isfile(meta_file):
+            try:
+                self.saver.restore(self.sess, checkpoint_path)
+                print('Loading checkpoint {}'.format(checkpoint_path))
+            except Exception as e:
+                print('Error occurred while loading the checkpoint: ', str(e))
         else:
-            print('Loading checkpoint failed')
+            print('Loading checkpoint failed. Meta file not found at {}'.format(meta_file))
 
     def load_ckpt(self, model_path):
         # Fresh train directly from ImageNet weights
